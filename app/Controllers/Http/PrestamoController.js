@@ -10,13 +10,15 @@ class PrestamoController {
 
 
         try {
-            const { name, cuentadante, hora_start, hora_end, state, novedad } = request.all()
-            const hora_startPrestamo = await Prestamo.query().where({ 'name': name }).first();
+            const { name, cuentadante, hora_start, hora_end, state, initial_novelty, final_novelty} = request.all()
+            const state_prestamo = await Prestamo.query().where({ 'state': state }).first();
 
-            console.log(hora_startPrestamo);
-            if (hora_startPrestamo) {
-                return response.status(400).json({ message: `Este ambiente " ${name} " ya se encuentra resgitrado en el sistema.` });
+            console.log(state_prestamo);
 
+            if (state_prestamo !== null) {
+                if(state_prestamo.state === 'inactivo'){
+                    return response.status(400).json({ message: `Este ambiente " ${name} " ya se encuentra en uso.` });
+                }
             } else {
                 const prestamo = await Prestamo.create({
                     name,
@@ -24,7 +26,8 @@ class PrestamoController {
                     hora_start,
                     hora_end,
                     state,
-                    novedad
+                    initial_novelty,
+                    final_novelty
                 });
                 return response.status(200).json({ message: 'El prestamo de ambiente fue creado correctamente.' });
             }

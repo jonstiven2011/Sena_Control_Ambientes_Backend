@@ -11,7 +11,7 @@ class EnviromentController {
 
 
         try {
-            const { name, cuentadante,usability, furnitures, state, equipment, novelty } = request.all()
+            const { name, cuentadante, furnitures, state, equipment, novelty } = request.all()
             const nameEnviroment = await Enviroment.query().where({ 'name': name }).first();
 
             console.log(nameEnviroment);
@@ -22,7 +22,6 @@ class EnviromentController {
                 const enviroment = await Enviroment.create({
                     name,
                     cuentadante,
-                    usability, 
                     state,
                     furnitures: JSON.stringify(furnitures),
                     equipment: JSON.stringify(equipment),
